@@ -517,7 +517,7 @@ PlayerSettings:
     Game_Performance: 0
     Hub: 0
     Purchasing: 0
-    UNet: 1
+    UNet: 0
     Unity_Ads: 0
   cloudProjectId: 57574893-c96f-4b8d-9765-f576136a4484
   projectName: roguelike

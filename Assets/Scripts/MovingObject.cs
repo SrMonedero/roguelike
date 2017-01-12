@@ -6,21 +6,21 @@ public abstract class MovingObject : MonoBehaviour {
 	public float moveTime = 0.1f;
 	public LayerMask blockingLayer;
 	private BoxCollider2D boxCollider;
-	private Rigidbody2D rigidbody2D;
+	private Rigidbody2D rigidBody;
 	private float inverseMoveTime;
 
 	protected virtual void Start () {
 		boxCollider = GetComponent<BoxCollider2D> ();
-		rigidbody2D = GetComponent<Rigidbody2D> ();
+		rigidBody = GetComponent<Rigidbody2D> ();
 		inverseMoveTime = 1f / moveTime;
 	}
 
 	protected bool Move (int xDir, int yDir, out RaycastHit2D hit) {
 		Vector2 start = transform.position;
-		Vector2 end = start * new Vector2(xDir, yDir);
+		Vector2 end = start + new Vector2(xDir, yDir);
 
 		boxCollider.enabled = false;
-		hiy = Physics2D.Linecast (start, end, blockingLayer);
+		hit = Physics2D.Linecast (start, end, blockingLayer);
 		boxCollider.enabled = true;
 
 		if (hit.transform == null) {
@@ -32,7 +32,7 @@ public abstract class MovingObject : MonoBehaviour {
 
 	protected virtual void AttemptMove<T> (int xDir, int yDir) where T : Component {
 		RaycastHit2D hit;
-		bool canMove = Move (xDir, yDir, hit);
+		bool canMove = Move (xDir, yDir, out hit);
 		if (hit.transform == null) {
 			return;
 		}
@@ -45,8 +45,8 @@ public abstract class MovingObject : MonoBehaviour {
 	protected IEnumerator SmoothMovement (Vector3 end) {
 		float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 		while (sqrRemainingDistance > float.Epsilon) {
-			Vector3 newPosition = Vector3.MoveTowards (rigidbody2D.position, end, inverseMoveTime * Time.deltaTime);
-			rigidbody2D.MovePosition (newPosition);
+			Vector3 newPosition = Vector3.MoveTowards (rigidBody.position, end, inverseMoveTime * Time.deltaTime);
+			rigidBody.MovePosition (newPosition);
 			sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 			yield return null;
 		}
