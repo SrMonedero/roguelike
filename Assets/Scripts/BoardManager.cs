@@ -81,12 +81,4 @@ public class BoardManager : MonoBehaviour {
 		LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
 		Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0f), Quaternion.identity);
 	}
-
-	void Start () {
-		
-	}
-
-	void Update () {
-		
-	}
 }
